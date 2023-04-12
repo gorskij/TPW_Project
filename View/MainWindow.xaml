@@ -3,10 +3,40 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:View"
+        xmlns:local="clr-namespace:View" xmlns:VM="clr-namespace:ViewModel;assembly=ViewModel"
         mc:Ignorable="d"
         Title="TPW_Project" Height="450" Width="800">
-    <Grid>
+    <Window.DataContext>
+        <VM:SimulationViewModel/>
+    </Window.DataContext>
+    <Border Background="LightGray">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-    </Grid>
+            <DockPanel Grid.Row="0" VerticalAlignment="Center" Margin="5">
+                <TextBlock Text="TPW_Project" DockPanel.Dock="Top" HorizontalAlignment="Center"/>
+                <DockPanel HorizontalAlignment="Left">
+                    <TextBlock Text="Number of balls : "/>
+                    <TextBox Text="{Binding NumberOfBalls}" Width="35"/>
+                    <Button Command="{Binding SubtractBallNumberCommand}" Content="-" BorderBrush="DarkGray" Margin="5, 0, 5, 0" Width="20"/>
+                    <Button Command="{Binding IncrementBallNumberCommand}" Content="+" BorderBrush="DarkGray" Width="20"/>
+                </DockPanel>
+                <DockPanel HorizontalAlignment="Right">
+                    <Button Command="{Binding StartCommand}" Content="Stop" BorderBrush="DarkGray" Margin="0, 0, 5, 0"/>
+                    <Button Command="{Binding StopCommand}" Content="Start" BorderBrush="DarkGray"/>
+                </DockPanel>
+            </DockPanel>
+
+            <Border Grid.Row="1" BorderBrush="LightGoldenrodYellow" BorderThickness="1" Background="LightBlue">
+                <ItemsControl>
+
+                </ItemsControl>
+            </Border>
+        </Grid>
+    </Border>
+    
+
 </Window>
