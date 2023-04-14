@@ -20,13 +20,35 @@
                 <TextBlock Text="TPW_Project" DockPanel.Dock="Top" HorizontalAlignment="Center"/>
                 <DockPanel HorizontalAlignment="Left">
                     <TextBlock Text="Number of balls : "/>
-                    <TextBox Text="{Binding NumberOfBalls}" Width="35"/>
-                    <Button Command="{Binding SubtractBallNumberCommand}" Content="-" BorderBrush="DarkGray" Margin="5, 0, 5, 0" Width="20"/>
-                    <Button Command="{Binding IncrementBallNumberCommand}" Content="+" BorderBrush="DarkGray" Width="20"/>
+                    <TextBox Text="{Binding NumberOfBalls}"
+                             IsEnabled="{Binding IsStartEnabled}"
+                             Width="35"/>
+                    <Button Command="{Binding SubtractBallNumberCommand}"
+                            IsEnabled="{Binding IsStartEnabled}"
+                            Content="-"
+                            BorderBrush="DarkGray"
+                            Margin="5, 0, 5, 0"
+                            Width="20"/>
+                    <Button Command="{Binding IncrementBallNumberCommand}"
+                            IsEnabled="{Binding IsStartEnabled}"
+                            Content="+"
+                            BorderBrush="DarkGray"
+                            Width="20"/>
                 </DockPanel>
                 <DockPanel HorizontalAlignment="Right">
-                    <Button Command="{Binding StartCommand}" Content="Stop" BorderBrush="DarkGray" Margin="0, 0, 5, 0"/>
-                    <Button Command="{Binding StopCommand}" Content="Start" BorderBrush="DarkGray"/>
+                    <TextBlock Text="Is running? : " Width="70"
+                             Margin="0, 0, 5, 0"/>
+                    <TextBlock Text="{Binding IsRunning}" Width="35"
+                             Margin="0, 0, 5, 0"/>
+                    <Button Command="{Binding StartCommand}"
+                            IsEnabled="{Binding IsStartEnabled}"
+                            Content="Start"
+                            BorderBrush="DarkGray"
+                            Margin="0, 0, 5, 0"/>
+                    <Button Command="{Binding StopCommand}"
+                            IsEnabled="{Binding IsStopEnabled}"
+                            Content="Stop" 
+                            BorderBrush="DarkGray"/>
                 </DockPanel>
             </DockPanel>
 
