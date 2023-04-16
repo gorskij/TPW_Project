@@ -1,6 +1,11 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using Data;
+using GalaSoft.MvvmLight.Command;
+using Logic;
+using Model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,12 +17,14 @@ namespace ViewModel
     {
 
         private int _numberOfBalls = 5;
-        private bool _isRunning = false;
         private bool _isStartEnabled = true;
         private bool _isStopEnabled = false;
+        private readonly ISimulationLogic _simulationLogic;
+        private ObservableCollection<BallModel> _ballCollection = new();
 
         public SimulationViewModel()
         {
+            _simulationLogic = new SimulationLogic();
             IncrementBallNumberCommand = new RelayCommand(IncrementBallNumber);
             SubtractBallNumberCommand = new RelayCommand(SubtractBallNumber);
             StartCommand = new RelayCommand(Start);
@@ -29,13 +36,13 @@ namespace ViewModel
         public ICommand StopCommand { get; }
         public ICommand StartCommand { get; }
 
-        public bool IsRunning
+        public ObservableCollection<BallModel> BallCollection
         {
-            get { return _isRunning; }
-            set {
-                if (value == _isRunning) return;
-                _isRunning = value;
-                OnPropertyChanged(nameof(IsRunning));
+            get { return _ballCollection; }
+            set
+            {
+                _ballCollection = value;
+                OnPropertyChanged(nameof(BallCollection));
             }
         }
 
@@ -85,14 +92,26 @@ namespace ViewModel
         {
             IsStartEnabled = false;
             IsStopEnabled = true;
-            IsRunning = true;
+
+            List<BallModel> BallList = _simulationLogic.GenerateBalls(NumberOfBalls, 800, 650);
+            foreach (BallModel ball in BallList)
+            {
+                _ballCollection.Add(ball);
+            }
+
+            _simulationLogic.Start();
+           // BallModel ball = new(100, 100, "Red", 5);
+
+         //   BallCollection.Add(ball);
         }
 
         public void Stop()
         {
             IsStopEnabled = false;
             IsStartEnabled = true;
-            IsRunning = false;
+            _simulationLogic.Stop();
+            BallCollection.Clear();
+
         }
     }
 }

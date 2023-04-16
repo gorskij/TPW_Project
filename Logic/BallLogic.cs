@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Model
+namespace Logic
 {
-    public class Ball
+    internal class BallLogic
     {
     }
 }

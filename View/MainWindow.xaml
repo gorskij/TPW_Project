@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:View" xmlns:VM="clr-namespace:ViewModel;assembly=ViewModel"
         mc:Ignorable="d"
-        Title="TPW_Project" Height="450" Width="800">
+        Title="TPW_Project" Height="720" Width="800">
     <Window.DataContext>
         <VM:SimulationViewModel/>
     </Window.DataContext>
@@ -52,9 +52,27 @@
                 </DockPanel>
             </DockPanel>
 
-            <Border Grid.Row="1" BorderBrush="LightGoldenrodYellow" BorderThickness="1" Background="LightBlue">
-                <ItemsControl>
-
+            <Border Grid.Row="1" BorderBrush="LightGoldenrodYellow" BorderThickness="1" Background="LightBlue" Height="649">
+                <ItemsControl ItemsSource="{Binding BallCollection}" Height="650" VerticalAlignment="Bottom" Width="800">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas Background="LightBlue"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Ellipse Width="{Binding Diameter}"
+                                Height="{Binding Diameter}"
+                                Fill="{Binding Color}">
+                            </Ellipse>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="Canvas.Top" Value="{Binding Y}" />
+                            <Setter Property="Canvas.Left" Value="{Binding X}" />
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
                 </ItemsControl>
             </Border>
         </Grid>
