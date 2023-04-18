@@ -50,7 +50,7 @@ namespace Logic
         {
             foreach(var ballHandler in  BallHandlerCollection)
             {
-                ballHandler.MoveBall();
+                ballHandler.MoveBall(_window.Width, _window.Height);
             }
         }
     }

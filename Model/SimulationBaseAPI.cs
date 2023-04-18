@@ -32,7 +32,9 @@ namespace Model
 
             foreach(var ballHandler in _simulationLogic.BallHandlerCollection)
             {
-                BallModelCollection.Add(new BallModel(ballHandler.Ball.X, ballHandler.Ball.Y, "Red", ballHandler.Ball.Radius));
+                List<String> colors = new List<string> { "Red", "Green", "Blue", "Pink", "Yellow", "Purple", "Aqua", "Orange", "Brown", "DeepPink", "GreenYellow"};
+                Random random = new Random();
+                BallModelCollection.Add(new BallModel(ballHandler.Ball.X, ballHandler.Ball.Y, colors[random.Next(0, colors.Count())], ballHandler.Ball.Radius));
             }
         }
 
