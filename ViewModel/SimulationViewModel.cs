@@ -15,16 +15,15 @@ namespace ViewModel
 {
     public class SimulationViewModel : ViewModelBase
     {
-
+        private SimulationModelAPI _simulationModel;
         private int _numberOfBalls = 5;
         private bool _isStartEnabled = true;
         private bool _isStopEnabled = false;
-        private readonly ISimulationLogic _simulationLogic;
-        private ObservableCollection<BallModel> _ballCollection = new();
+        private ObservableCollection<BallModel> _ballModelCollection = new();
 
         public SimulationViewModel()
         {
-            _simulationLogic = new SimulationLogic();
+            _simulationModel = SimulationModelAPI.CreateSimulationModel(800, 650);
             IncrementBallNumberCommand = new RelayCommand(IncrementBallNumber);
             SubtractBallNumberCommand = new RelayCommand(SubtractBallNumber);
             StartCommand = new RelayCommand(Start);
@@ -36,13 +35,13 @@ namespace ViewModel
         public ICommand StopCommand { get; }
         public ICommand StartCommand { get; }
 
-        public ObservableCollection<BallModel> BallCollection
+        public ObservableCollection<BallModel> BallModelCollection
         {
-            get { return _ballCollection; }
+            get { return _ballModelCollection; }
             set
             {
-                _ballCollection = value;
-                OnPropertyChanged(nameof(BallCollection));
+                _ballModelCollection = value;
+                OnPropertyChanged(nameof(BallModelCollection));
             }
         }
 
@@ -93,24 +92,19 @@ namespace ViewModel
             IsStartEnabled = false;
             IsStopEnabled = true;
 
-            List<BallModel> BallList = _simulationLogic.GenerateBalls(NumberOfBalls, 800, 650);
-            foreach (BallModel ball in BallList)
+            _simulationModel.GenerateBalls(_numberOfBalls);
+            foreach (BallModel ball in _simulationModel.BallModelCollection)
             {
-                _ballCollection.Add(ball);
+                _ballModelCollection.Add(ball);
             }
-
-            _simulationLogic.Start();
-           // BallModel ball = new(100, 100, "Red", 5);
-
-         //   BallCollection.Add(ball);
+            _simulationModel.Start();
         }
 
         public void Stop()
         {
             IsStopEnabled = false;
             IsStartEnabled = true;
-            _simulationLogic.Stop();
-            BallCollection.Clear();
+            BallModelCollection.Clear();
 
         }
     }
