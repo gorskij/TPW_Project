@@ -36,11 +36,12 @@ namespace Logic
         {
             double radius = 15;
             double x, y;
+            List<string> colors = new List<string>(){ "Red", "Green", "Yellow", "Pink", "Blue" };
             for (int i = 0; i < ammountOfBalls; i++)
             {
                 x = _random.Next(30, width - 60);
                 y = _random.Next(30, height - 60);
-                BallModel ball = new(x,y,"Red",radius);
+                BallModel ball = new(x,y,colors[_random.Next(0, colors.Count())],radius);
                 _ballCollectionManager.Add(ball);
             }
             return _ballCollectionManager.Get();
