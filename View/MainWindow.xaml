@@ -53,7 +53,7 @@
             </DockPanel>
 
             <Border Grid.Row="1" BorderBrush="LightGoldenrodYellow" BorderThickness="1" Background="LightBlue" Height="649">
-                <ItemsControl ItemsSource="{Binding BallCollection}" Height="650" VerticalAlignment="Bottom" Width="800">
+                <ItemsControl ItemsSource="{Binding BallModelCollection}" Height="650" VerticalAlignment="Bottom" Width="800">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <Canvas Background="LightBlue"/>

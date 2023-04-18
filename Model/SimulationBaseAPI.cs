@@ -65,7 +65,8 @@ namespace Model
 
         public override void Dispose()
         {
-            _timer.Dispose();
+           _timer.Dispose();
+            BallModelCollection.Clear();
         }
     }
 }

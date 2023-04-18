@@ -19,14 +19,20 @@ internal class Ball: BallAPI
 {
     private double _x;
     private double _y;
-    private double _velY;
-    private double _velX;
+    private double _velY = 0;
+    private double _velX = 0;
     private readonly Random _random = new();
    
     public Ball(double x, double y, double radius)
     {
-        _velX = _random.Next(-10, 10);
-        _velY = _random.Next(-10, 10);
+        while(_velX == 0)
+        {
+            _velX = _random.Next(-3, 3);
+        }
+        while(_velY == 0)
+        { 
+            _velY = _random.Next(-3, 3);
+        }
         _x = x;
         _y = y;
         Radius = radius;

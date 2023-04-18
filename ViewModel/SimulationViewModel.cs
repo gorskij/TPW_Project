@@ -105,7 +105,7 @@ namespace ViewModel
             IsStopEnabled = false;
             IsStartEnabled = true;
             BallModelCollection.Clear();
-
+            _simulationModel.Stop();
         }
     }
 }
