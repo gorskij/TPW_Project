@@ -33,7 +33,7 @@ namespace Model
             foreach(var ballHandler in _simulationLogic.BallHandlerCollection)
             {
                 List<String> colors = new List<string> { "Red", "Green", "Blue", "Pink", "Yellow", "Purple", "Aqua", "Orange", "Brown", "DeepPink", "GreenYellow"};
-                Random random = new Random();
+                Random random = new();
                 BallModelCollection.Add(new BallModel(ballHandler.Ball.X, ballHandler.Ball.Y, colors[random.Next(0, colors.Count())], ballHandler.Ball.Radius));
             }
         }
@@ -62,13 +62,13 @@ namespace Model
         public override void Stop()
         {
             BallModelCollection.Clear();
+            _simulationLogic.Stop();
             Dispose();
         }
 
         public override void Dispose()
         {
            _timer.Dispose();
-            BallModelCollection.Clear();
         }
     }
 }

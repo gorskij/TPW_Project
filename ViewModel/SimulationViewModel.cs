@@ -51,7 +51,7 @@ namespace ViewModel
             set
             {
                 _numberOfBalls = value;
-                OnPropertyChanged(nameof(NumberOfBalls));
+               OnPropertyChanged(nameof(NumberOfBalls));
             }
         }
 
