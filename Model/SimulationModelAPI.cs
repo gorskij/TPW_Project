@@ -29,24 +29,26 @@ namespace Model
         public override void GenerateBalls(int numberOfBalls)
         {
             _simulationLogic.GenerateBalls(numberOfBalls);
+            List<String> colors = new List<string> { "Red", "Green", "Blue", "Pink", "Yellow", "Purple", "Aqua", "Orange", "Brown", "DeepPink", "GreenYellow" };
+            Random random = new();
 
-            foreach(var ballHandler in _simulationLogic.BallHandlerCollection)
+            foreach (var ball in _simulationLogic.BallHandler.BallCollection)
             {
-                List<String> colors = new List<string> { "Red", "Green", "Blue", "Pink", "Yellow", "Purple", "Aqua", "Orange", "Brown", "DeepPink", "GreenYellow"};
-                Random random = new();
-                BallModelCollection.Add(new BallModel(ballHandler.Ball.X, ballHandler.Ball.Y, colors[random.Next(0, colors.Count())], ballHandler.Ball.Radius));
+                BallModelCollection.Add(new BallModel(ball.X, ball.Y, colors[random.Next(0, colors.Count())], ball.Radius));
             }
         }
 
         public override void Start()
         {
-            _timer = new Timer(Update, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(16));
-            
+            _simulationLogic.Start();
+            Task.Run(() =>
+            {
+                _timer = new Timer(Update, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(16));
+            });
         }
 
         private void Update(object? state)
         {
-            _simulationLogic.Update();
             UpdateBalls();
         }
 
@@ -54,21 +56,21 @@ namespace Model
         {
             for(int i = 0; i < BallModelCollection.Count; i++)
             {
-                BallModelCollection[i].X = _simulationLogic.BallHandlerCollection[i].Ball.X;
-                BallModelCollection[i].Y = _simulationLogic.BallHandlerCollection[i].Ball.Y;
+                BallModelCollection[i].X = _simulationLogic.BallHandler.BallCollection[i].X;
+                BallModelCollection[i].Y = _simulationLogic.BallHandler.BallCollection[i].Y;
             }
         }
 
         public override void Stop()
         {
-            BallModelCollection.Clear();
-            _simulationLogic.Stop();
             Dispose();
+            _simulationLogic.Stop();
+            BallModelCollection.Clear();
         }
 
         public override void Dispose()
         {
-           _timer.Dispose();
+            _timer.Dispose();
         }
     }
 }

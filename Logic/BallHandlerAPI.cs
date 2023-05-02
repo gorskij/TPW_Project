@@ -9,32 +9,33 @@ namespace Logic
 {
     public abstract class BallHandlerAPI
     {
-        public abstract BallAPI Ball { get; }
-        public abstract void MoveBall(int width, int height);
-        public static BallHandlerAPI CreateBallHandler(BallAPI ball)
+        public abstract List<BallAPI> BallCollection { get; }
+        
+        public abstract void MoveBall(BallAPI ball);
+        public static BallHandlerAPI CreateBallHandler(WindowAPI window)
         {
-            return new BallHandler(ball);
+            return new BallHandler(window);
         }
     }
 
     internal class BallHandler : BallHandlerAPI
     {
-        private readonly BallAPI _ball;
+        private WindowAPI _window;
 
-        public BallHandler(BallAPI ball)
+        public BallHandler(WindowAPI window)
         {
-            _ball = ball;
+            _window = window;
         }
-        public override BallAPI Ball => _ball;
+        public override List<BallAPI> BallCollection { get; } = new List<BallAPI>();
 
-        public override void MoveBall(int width, int height)
+        public override void MoveBall(BallAPI ball)
         {
-            if (_ball.X + _ball.Diameter+_ball.Radius-4 >= width) _ball.VelX *= -1;
-            if (_ball.Y + _ball.Diameter+_ball.Radius-5 >= height) _ball.VelY *= -1;
-            if (_ball.X < 0) _ball.VelX *= -1;
-            if (_ball.Y < 0) _ball.VelY *= -1;
-            _ball.X += _ball.VelX;
-            _ball.Y += _ball.VelY;
+            if (ball.X + ball.Diameter+ball.Radius-4 >= _window.Width) ball.VelX *= -1;
+            if (ball.Y + ball.Diameter+ball.Radius-5 >= _window.Height) ball.VelY *= -1;
+            if (ball.X < 0) ball.VelX *= -1;
+            if (ball.Y < 0) ball.VelY *= -1;
+            ball.X += ball.VelX;
+            ball.Y += ball.VelY;
         }
     }
 }

@@ -4,10 +4,9 @@ namespace Logic
 {
     public abstract class SimulationLogicAPI
     {
-        public abstract List<BallHandlerAPI> BallHandlerCollection { get; }
-
+        public abstract BallHandlerAPI BallHandler  { get; }
         public abstract void GenerateBalls(int numberOfBalls);
-        public abstract void Update();
+        public abstract void Start();
         public abstract void Stop();
         public static SimulationLogicAPI CreateSimulationLogic(int width, int height)
         {
@@ -19,15 +18,21 @@ namespace Logic
     {
         private readonly WindowAPI _window;
         private readonly Random _random = new();
+        private BallHandlerAPI _ballHandler;
+        private bool _stopThreads = false;
+
         public SimulationLogic(int width, int height)
         {
             _window = WindowAPI.CreateWindow(width, height);
+            _ballHandler = BallHandlerAPI.CreateBallHandler(_window);
+
         }
-        public override List<BallHandlerAPI> BallHandlerCollection { get; } = new List<BallHandlerAPI>();
+
+        public override BallHandlerAPI BallHandler => _ballHandler;
+
         public override void GenerateBalls(int numberOfBalls)
         {
             BallAPI ball;
-            BallHandlerAPI ballHandler;
             int x;
             int y;
             int radius = 20;
@@ -36,22 +41,33 @@ namespace Logic
                 x = _random.Next(radius, _window.Width - (radius * 3));
                 y = _random.Next(radius, _window.Height - (radius * 3));
                 ball = BallAPI.CreateBall(x, y, radius);
-                ballHandler = BallHandlerAPI.CreateBallHandler(ball);
-                BallHandlerCollection.Add(ballHandler);
+                _ballHandler.BallCollection.Add(ball);
             }
         }
+
+
+        public override void Start()
+        {
+            _stopThreads = false;
+            foreach (BallAPI ball in _ballHandler.BallCollection)
+            {
+                Thread thread = new(() =>
+                {
+                    while (!_stopThreads)
+                    {
+                        _ballHandler.MoveBall(ball);
+                        Thread.Sleep(16);
+                    }
+                });
+                thread.Start();
+            }
+        }
+
 
         public override void Stop()
         {
-            BallHandlerCollection.Clear();
-        }
-
-        public override void Update()
-        {
-            foreach(var ballHandler in  BallHandlerCollection)
-            {
-                ballHandler.MoveBall(_window.Width, _window.Height);
-            }
+            _stopThreads = true;
+            BallHandler.BallCollection.Clear();
         }
     }
 
