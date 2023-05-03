@@ -29,12 +29,12 @@ namespace Model
         public override void GenerateBalls(int numberOfBalls)
         {
             _simulationLogic.GenerateBalls(numberOfBalls);
-            List<String> colors = new List<string> { "Red", "Green", "Blue", "Pink", "Yellow", "Purple", "Aqua", "Orange", "Brown", "DeepPink", "GreenYellow" };
+            List<string> colors = new() { "Red", "Green", "Blue", "Pink", "Yellow", "Purple", "Aqua", "Orange", "Brown", "DeepPink", "GreenYellow" };
             Random random = new();
 
             foreach (var ball in _simulationLogic.BallHandler.BallCollection)
             {
-                BallModelCollection.Add(new BallModel(ball.X, ball.Y, colors[random.Next(0, colors.Count())], ball.Radius));
+                BallModelCollection.Add(new BallModel(ball.X, ball.Y, colors[random.Next(0, colors.Count)], ball.Radius));
             }
         }
 
@@ -56,8 +56,8 @@ namespace Model
         {
             for(int i = 0; i < BallModelCollection.Count; i++)
             {
-                BallModelCollection[i].X = _simulationLogic.BallHandler.BallCollection[i].X;
-                BallModelCollection[i].Y = _simulationLogic.BallHandler.BallCollection[i].Y;
+                BallModelCollection[i].X = _simulationLogic.BallHandler.BallCollection[i].X - BallModelCollection[i].Radius;
+                BallModelCollection[i].Y = _simulationLogic.BallHandler.BallCollection[i].Y - BallModelCollection[i].Radius;
             }
         }
 

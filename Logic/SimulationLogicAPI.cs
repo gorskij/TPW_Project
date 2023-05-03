@@ -35,9 +35,11 @@ namespace Logic
             BallAPI ball;
             int x;
             int y;
-            int radius = 20;
+            int radius;
+            double distance;
             for (int i = 0; i < numberOfBalls; i++)
             {
+                radius = _random.Next(10, 30);
                 x = _random.Next(radius, _window.Width - (radius * 3));
                 y = _random.Next(radius, _window.Height - (radius * 3));
                 ball = BallAPI.CreateBall(x, y, radius);
@@ -55,6 +57,7 @@ namespace Logic
                 {
                     while (!_stopThreads)
                     {
+                        _ballHandler.CheckCollision(ball);
                         _ballHandler.MoveBall(ball);
                         Thread.Sleep(16);
                     }

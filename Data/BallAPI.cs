@@ -11,6 +11,7 @@ public abstract class BallAPI
     public abstract double Y { get; set; }
     public abstract double VelX { get; set; }
     public abstract double VelY { get; set; }
+    public abstract double Mass { get; }
     public abstract double Radius { get; }
     public abstract double Diameter { get; }
 }
@@ -21,6 +22,9 @@ internal class Ball: BallAPI
     private double _y;
     private double _velY = 0;
     private double _velX = 0;
+    private double _mass;
+    private double _radius;
+    private double _diameter;
     private readonly Random _random = new();
    
     public Ball(double x, double y, double radius)
@@ -35,8 +39,9 @@ internal class Ball: BallAPI
         }
         _x = x;
         _y = y;
-        Radius = radius;
-        Diameter = radius * 2;
+        _radius = radius;
+        _mass = radius;
+        _diameter = radius * 2;
     }
 
     public override double VelX 
@@ -63,6 +68,7 @@ internal class Ball: BallAPI
         set => _y = value;
     }
     
-    public override double Radius { get; }
-    public override double Diameter { get; }
+    public override double Radius { get => _radius; }
+    public override double Diameter { get => _diameter; }
+    public override double Mass { get => _mass; }
 }
