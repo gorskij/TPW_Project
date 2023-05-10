@@ -1,4 +1,5 @@
 ﻿using Data;
+using System.Threading;
 
 namespace Logic
 {
@@ -20,6 +21,7 @@ namespace Logic
         private readonly Random _random = new();
         private BallHandlerAPI _ballHandler;
         private bool _stopThreads = false;
+        private List<Thread> _threads = new List<Thread>();
 
         public SimulationLogic(int width, int height)
         {
@@ -36,29 +38,56 @@ namespace Logic
             int x;
             int y;
             int radius;
-            double distance;
             for (int i = 0; i < numberOfBalls; i++)
             {
-                radius = _random.Next(10, 30);
-                x = _random.Next(radius, _window.Width - (radius * 3));
-                y = _random.Next(radius, _window.Height - (radius * 3));
+                radius = _random.Next(10, 20);
+                do
+                {
+                    x = _random.Next(radius, _window.Width - (radius * 3));
+                    y = _random.Next(radius, _window.Height - (radius * 3));
+                } while (IsOverlaping(x, y, radius));
+
                 ball = BallAPI.CreateBall(x, y, radius);
                 _ballHandler.BallCollection.Add(ball);
             }
         }
 
-
+        private bool IsOverlaping(int x, int y, int radius)
+        {
+            double distance;
+            foreach (BallAPI ball in BallHandler.BallCollection)
+            {
+                distance = Math.Sqrt(Math.Pow(x - ball.X, 2) + Math.Pow(y - ball.Y, 2));
+                if (distance <= radius + ball.Radius) return true;
+            }
+            return false;
+        }
         public override void Start()
         {
             _stopThreads = false;
-            foreach (BallAPI ball in _ballHandler.BallCollection)
+            Semaphore semaphore = new Semaphore(1, 1);
+            foreach (BallAPI mainBall in _ballHandler.BallCollection)
             {
                 Thread thread = new(() =>
                 {
                     while (!_stopThreads)
                     {
-                        _ballHandler.CheckCollision(ball);
-                        _ballHandler.MoveBall(ball);
+                        semaphore.WaitOne();
+                        if(_stopThreads)
+                        {
+                            semaphore.Release();
+                            break;
+                        }
+                        foreach (BallAPI ball in _ballHandler.BallCollection)
+                        {
+                            if (ball == mainBall)
+                            {
+                                continue;
+                            }
+                            _ballHandler.CheckCollision(mainBall, ball);
+                        }
+                        _ballHandler.MoveBall(mainBall);
+                        semaphore.Release();
                         Thread.Sleep(16);
                     }
                 });
@@ -70,6 +99,7 @@ namespace Logic
         public override void Stop()
         {
             _stopThreads = true;
+            
             BallHandler.BallCollection.Clear();
         }
     }

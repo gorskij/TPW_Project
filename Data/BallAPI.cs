@@ -31,11 +31,11 @@ internal class Ball: BallAPI
     {
         while(_velX == 0)
         {
-            _velX = _random.Next(-3, 3);
+            _velX = _random.Next(-2, 2);
         }
         while(_velY == 0)
         { 
-            _velY = _random.Next(-3, 3);
+            _velY = _random.Next(-2, 2);
         }
         _x = x;
         _y = y;
