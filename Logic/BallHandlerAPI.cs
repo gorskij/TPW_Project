@@ -22,7 +22,6 @@ namespace Logic
     internal class BallHandler : BallHandlerAPI
     {
         private WindowAPI _window;
-        private readonly object _lock = new object();
 
         public BallHandler(WindowAPI window)
         {

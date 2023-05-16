@@ -72,18 +72,24 @@ namespace Logic
                 {
                     while (!_stopThreads)
                     {
-                        lock (_collisionLock)
+                        foreach (BallAPI ball in _ballHandler.BallCollection)
                         {
-                            foreach (BallAPI ball in _ballHandler.BallCollection)
+                            if (ball == mainBall)
                             {
-                                if (ball == mainBall)
-                                {
-                                    continue;
-                                }
+                                continue;
+                            }
+
+                            lock (_collisionLock)
+                            {
                                 _ballHandler.CheckCollision(mainBall, ball);
                             }
+                        }
+
+                        lock (_collisionLock)
+                        {
                             _ballHandler.CheckWallCollision(mainBall);
                         }
+
                         lock (_moveLock)
                         {
                             mainBall.Move();

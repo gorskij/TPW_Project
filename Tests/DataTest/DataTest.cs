@@ -36,4 +36,20 @@ public class DataTest
         Assert.AreEqual(newX, ball.X);
         Assert.AreEqual(newY, ball.Y);
     }
+    
+    [TestMethod]
+    public void MoveTest()
+    {
+        double x = 5;
+        double y = 10;
+        double radius = 2;
+        BallAPI ball = BallAPI.CreateBall(x, y, radius);
+
+        ball.VelX = 10;
+        ball.VelY = 10;
+        ball.Move();
+        
+        Assert.AreEqual(ball.X, 15);
+        Assert.AreEqual(ball.Y, 20);
+    }
 }
