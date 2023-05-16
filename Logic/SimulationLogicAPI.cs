@@ -21,7 +21,8 @@ namespace Logic
         private readonly Random _random = new();
         private BallHandlerAPI _ballHandler;
         private bool _stopThreads = false;
-        private List<Thread> _threads = new List<Thread>();
+        object _collisionLock = new object();
+        object _moveLock = new object();
 
         public SimulationLogic(int width, int height)
         {
@@ -65,29 +66,28 @@ namespace Logic
         public override void Start()
         {
             _stopThreads = false;
-            Semaphore semaphore = new Semaphore(1, 1);
             foreach (BallAPI mainBall in _ballHandler.BallCollection)
             {
                 Thread thread = new(() =>
                 {
                     while (!_stopThreads)
                     {
-                        semaphore.WaitOne();
-                        if(_stopThreads)
+                        lock (_collisionLock)
                         {
-                            semaphore.Release();
-                            break;
-                        }
-                        foreach (BallAPI ball in _ballHandler.BallCollection)
-                        {
-                            if (ball == mainBall)
+                            foreach (BallAPI ball in _ballHandler.BallCollection)
                             {
-                                continue;
+                                if (ball == mainBall)
+                                {
+                                    continue;
+                                }
+                                _ballHandler.CheckCollision(mainBall, ball);
                             }
-                            _ballHandler.CheckCollision(mainBall, ball);
+                            _ballHandler.CheckWallCollision(mainBall);
                         }
-                        _ballHandler.MoveBall(mainBall);
-                        semaphore.Release();
+                        lock (_moveLock)
+                        {
+                            mainBall.Move();
+                        }
                         Thread.Sleep(16);
                     }
                 });

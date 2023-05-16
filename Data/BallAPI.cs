@@ -6,7 +6,7 @@ public abstract class BallAPI
     {
         return new Ball(x, y, radius);
     }
-
+    public abstract void Move();
     public abstract double X { get; set; }
     public abstract double Y { get; set; }
     public abstract double VelX { get; set; }
@@ -42,6 +42,12 @@ internal class Ball: BallAPI
         _radius = radius;
         _mass = radius;
         _diameter = radius * 2;
+    }
+
+    public override void Move()
+    {
+        _x += _velX;
+        _y += _velY;
     }
 
     public override double VelX 
