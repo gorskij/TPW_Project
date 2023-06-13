@@ -13,28 +13,42 @@ namespace Logic
         
         public abstract void CheckWallCollision(BallAPI ball);
         public abstract void CheckCollision(BallAPI mainBall, BallAPI ball);
-        public static BallHandlerAPI CreateBallHandler(WindowAPI window)
+        public static BallHandlerAPI CreateBallHandler(WindowAPI window, BallsLoggerAPI _logger)
         {
-            return new BallHandler(window);
+            return new BallHandler(window, _logger);
         }
     }
 
     internal class BallHandler : BallHandlerAPI
     {
         private WindowAPI _window;
-
-        public BallHandler(WindowAPI window)
+        private BallsLoggerAPI _logger;
+        public BallHandler(WindowAPI window, BallsLoggerAPI logger)
         {
             _window = window;
+            _logger = logger;
         }
         public override List<BallAPI> BallCollection { get; } = new List<BallAPI>();
 
         public override void CheckWallCollision(BallAPI ball)
         {
-            if (ball.X + ball.Diameter+ball.Radius-4 >= _window.Width) ball.VelX *= -1;
-            if (ball.Y + ball.Diameter+ball.Radius-5 >= _window.Height) ball.VelY *= -1;
-            if (ball.X < 0) ball.VelX *= -1;
-            if (ball.Y < 0) ball.VelY *= -1;
+            bool velXChanged = false;
+            bool velYChanged = false;
+            if (ball.X + ball.Diameter+ball.Radius-4 >= _window.Width) velXChanged = true;
+            if (ball.Y + ball.Diameter+ball.Radius-5 >= _window.Height) velYChanged = true;
+            if (ball.X < 0) velXChanged = true;
+            if (ball.Y < 0) velYChanged = true;
+
+            if (velXChanged == true)
+            {
+                _logger.Log("Ball(" + ball.Number + ") hit wall");
+                ball.VelX *= -1;
+            }
+            if (velYChanged == true)
+            {
+                _logger.Log("Ball(" + ball.Number + ") hit wall");
+                ball.VelY *= -1;
+            }
         }
 
         public override void CheckCollision(BallAPI mainBall, BallAPI ball)
@@ -74,6 +88,8 @@ namespace Logic
                 mainBall.Y -= overlap / 2 * ny;
                 ball.X += overlap / 2 * nx;
                 ball.Y += overlap / 2 * ny;
+
+                _logger.Log("Ball(" + mainBall.Number + ") hit ball(" + ball.Number + ")");
             }
         }
     }

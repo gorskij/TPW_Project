@@ -2,9 +2,9 @@
 
 public abstract class BallAPI
 {
-    public static BallAPI CreateBall(double x, double y, double radius)
+    public static BallAPI CreateBall(double x, double y, double radius, int number)
     {
-        return new Ball(x, y, radius);
+        return new Ball(x, y, radius, number);
     }
     public abstract void Move();
     public abstract double X { get; set; }
@@ -14,6 +14,7 @@ public abstract class BallAPI
     public abstract double Mass { get; }
     public abstract double Radius { get; }
     public abstract double Diameter { get; }
+    public abstract int Number { get; }
 }
 
 internal class Ball: BallAPI
@@ -26,8 +27,9 @@ internal class Ball: BallAPI
     private double _radius;
     private double _diameter;
     private readonly Random _random = new();
-   
-    public Ball(double x, double y, double radius)
+    private readonly int _number;
+
+    public Ball(double x, double y, double radius, int number)
     {
         while(_velX == 0)
         {
@@ -42,6 +44,7 @@ internal class Ball: BallAPI
         _radius = radius;
         _mass = radius;
         _diameter = radius * 2;
+        _number = number;
     }
 
     public override void Move()
@@ -77,4 +80,5 @@ internal class Ball: BallAPI
     public override double Radius { get => _radius; }
     public override double Diameter { get => _diameter; }
     public override double Mass { get => _mass; }
+    public override int Number { get => _number; }
 }

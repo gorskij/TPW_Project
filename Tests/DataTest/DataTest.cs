@@ -12,11 +12,13 @@ public class DataTest
         double y = 10;
         double radius = 2;
         double diameter = radius * 2;
-        BallAPI ball = BallAPI.CreateBall(x, y, radius);
+        int number = 2;
+        BallAPI ball = BallAPI.CreateBall(x, y, radius, number);
 
         Assert.AreEqual(x, ball.X);
         Assert.AreEqual(y, ball.Y);
         Assert.AreEqual(radius, ball.Radius);
+        Assert.AreEqual(number, ball.Number);
         Assert.AreEqual(diameter, ball.Diameter);
     }
 
@@ -26,7 +28,8 @@ public class DataTest
         double x = 5;
         double y = 10;
         double radius = 2;
-        BallAPI ball = BallAPI.CreateBall(x, y, radius);
+        int number = 2;
+        BallAPI ball = BallAPI.CreateBall(x, y, radius, number);
 
         double newX = 10;
         double newY = 20;
@@ -43,7 +46,8 @@ public class DataTest
         double x = 5;
         double y = 10;
         double radius = 2;
-        BallAPI ball = BallAPI.CreateBall(x, y, radius);
+        int number = 2;
+        BallAPI ball = BallAPI.CreateBall(x, y, radius, number);
 
         ball.VelX = 10;
         ball.VelY = 10;

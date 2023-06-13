@@ -23,12 +23,13 @@ namespace Logic
         private bool _stopThreads = false;
         object _collisionLock = new object();
         object _moveLock = new object();
+        private BallsLoggerAPI _logger;
 
         public SimulationLogic(int width, int height)
         {
             _window = WindowAPI.CreateWindow(width, height);
-            _ballHandler = BallHandlerAPI.CreateBallHandler(_window);
-
+            _logger = BallsLoggerAPI.CreateBallsLoggerAPI();
+            _ballHandler = BallHandlerAPI.CreateBallHandler(_window, _logger);
         }
 
         public override BallHandlerAPI BallHandler => _ballHandler;
@@ -48,7 +49,7 @@ namespace Logic
                     y = _random.Next(radius, _window.Height - (radius * 3));
                 } while (IsOverlaping(x, y, radius));
 
-                ball = BallAPI.CreateBall(x, y, radius);
+                ball = BallAPI.CreateBall(x, y, radius, i);
                 _ballHandler.BallCollection.Add(ball);
             }
         }
@@ -65,6 +66,8 @@ namespace Logic
         }
         public override void Start()
         {
+            _logger.Start();
+            _logger.Log("Simulation Start");
             _stopThreads = false;
             foreach (BallAPI mainBall in _ballHandler.BallCollection)
             {
@@ -107,6 +110,8 @@ namespace Logic
             _stopThreads = true;
             
             BallHandler.BallCollection.Clear();
+            _logger.Log("Simulation Stop");
+            _logger.Dispose();
         }
     }
 
